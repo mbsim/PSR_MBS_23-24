@@ -10,6 +10,7 @@ value = 50
 # Calcula a raiz quadrada dos números de 0 até 50 milhões
 for i in range(1,value):
     r = math.sqrt(i)
+    print(r)
 
 fim = time()
     
