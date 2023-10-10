@@ -7,6 +7,7 @@ import random
 import string
 from nltk.corpus import words
 from collections import namedtuple
+from pprint import pprint
 
 
 Input = namedtuple('Input', ['requested', 'received', 'duration'])   
@@ -38,9 +39,6 @@ def caracter_function(args):
     start_time = time() 
 
     while True:
-
-        tempo_atual = time()
-        tempo_decorrido = int(tempo_atual - start_time )
 
         if tempo_decorrido >= args.max_value:
             break  
@@ -78,7 +76,7 @@ def caracter_function(args):
 
         print(record.requested)
         print(record.received)
-        print(recordtemp_mx.duration)
+        print(record.duration)
 
 def arg_init():
 
@@ -98,6 +96,7 @@ def arg_init():
 def temp_mx(tentativa, bem_sucedido,tempo_decorrido):
 
     args = arg_init()
+    input_records = []
 
     if not args.use_words:
 
@@ -109,13 +108,13 @@ def temp_mx(tentativa, bem_sucedido,tempo_decorrido):
 
         start_time = time()
 
-        while True:
+        while tempo_decorrido <= args.max_value:
 
             tempo_atual = time()
             tempo_decorrido = int(tempo_atual - start_time )
 
-            if tempo_decorrido >= args.max_value:
-                break
+            #if tempo_decorrido >= args.max_value:
+                #break
 
             random_word = generate_random_word()
             user_input = input(f"Digite {random_word} : ")
@@ -129,13 +128,26 @@ def temp_mx(tentativa, bem_sucedido,tempo_decorrido):
 
                 print("Incorreto!")
 
-            tentativa += 1    
+            tentativa += 1
+            input_record = Input(requested=random_word, received=user_input, duration=tempo_decorrido)
+            input_records.append(input_record)  # Adicione o registro à lista
+    
 
         print(f"Em {tentativa} tentativas voce acertou em: {bem_sucedido}, em {tempo_decorrido} segundos.")
+        print(f"{tempo_atual}")
+        print(f"{start_time}")
+        
+        for record in input_records:
+
+            print(record.requested)
+            print(record.received)
+            print(record.duration)   
+
 
 def input_mx(tentativa, bem_sucedido, tempo_decorrido): 
 
     args = arg_init()
+    input_records = []
 
     if  args.use_words: 
 
@@ -167,12 +179,20 @@ def input_mx(tentativa, bem_sucedido, tempo_decorrido):
                     print("Incorreto!")  
 
                 tentativa += 1 
+                input_record = Input(requested=random_caracter, received=key, duration=duration)
+                input_records.append(input_record)  # Adicione o registro à lista
 
+
+            
             print(f"De {tentativa} tentativas voce acertou em: {bem_sucedido}, com um tempo de jogo de: {tempo_decorrido} segundos.")        
+            
+            for record in input_records:
+
+                print(record.requested)
+                print(record.received)
+                print(record.duration)   
 
     else:
-
-        input_records = []
 
         tentativa=0
         bem_sucedido = 0
@@ -222,6 +242,32 @@ def input_mx(tentativa, bem_sucedido, tempo_decorrido):
             print(record.received)
             print(record.duration)   
 
+def statistic(bem_sucedido,tentativa,input_records,tempo_atual,tempo_final):
+
+    accuracy = bem_sucedido / tentativa if tentativa > 0 else 0
+
+    type_average_duration = sum(input_record.duration for input_record in input_records) / tentativa if tentativa > 0 else 0
+
+    type_hit_average_duration = sum(input_record.duration for input_record in input_records if input_record.requested == input_record.received and bem_sucedido > 0) / bem_sucedido if bem_sucedido > 0 else 0
+
+    type_miss_average_duration = sum(input_record.duration for input_record in input_records if input_record.requested != input_record.received and tentativa - bem_sucedido > 0) / (tentativa - bem_sucedido) if tentativa - bem_sucedido > 0 else 0
+
+    result_dict = {
+        'accuracy': accuracy,
+        'inputs': input_records,
+        'number_of_hits': bem_sucedido,
+        'number_of_types': tentativa,
+        'test_duration': input_records.duration,
+        'test_end': tempo_atual,
+        'test_start': tempo_final,
+        'type_average_duration': type_average_duration,
+        'type_hit_average_duration': type_hit_average_duration,
+        'type_miss_average_duration': type_miss_average_duration
+    }
+
+    pprint(result_dict)    
+
+
 def main():
 
     bem_sucedido = 0
@@ -236,8 +282,8 @@ def main():
     print("time mode:", args.use_time_mode)
     print("use words:", args.use_words)
 
-
-    aguardar_tecla()
+    input("Pressione uma tecla para começar o desafio...")
+    #aguardar_tecla()
 
     if args.use_time_mode:
 
@@ -246,6 +292,10 @@ def main():
     else:
 
         input_mx(tentativa, bem_sucedido,tempo_decorrido) 
+
+    statistic(bem_sucedido,tentativa,input_records,tempo_atual,tempo_final)
+
+    
 
 if __name__ == "__main__":
     main()
