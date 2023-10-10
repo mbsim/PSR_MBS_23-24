@@ -22,7 +22,7 @@ def main():
 
     # Process command line arguments
     parser = argparse.ArgumentParser(description='Script to compute perfect numbers.')
-    #parser.add_argument('-mn', '--maximum_number', type=int, help='max number.', required=True)
+    parser.add_argument('-mn', '--maximum_number', type=int, help='max number.', required=True)
     parser.add_argument('-n', '--name', type=str, help='A name to print.', required=False, default='Antonio')
     parser.add_argument('-sl', '--say_hello', help='Say hello?', action='store_true')
 
