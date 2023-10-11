@@ -82,7 +82,7 @@ def obtain_input_answer(x,random_word, bem_sucedido,input_records):
             print(Fore.YELLOW + f"Teste cancelado" + Style.RESET_ALL)
            
         else:
-            print(Fore.RED + f"Incorreto! " + Style.RESET_ALL + "Voce inseriu " +Fore.RED + "{key}" + Style.RESET_ALL)
+            print(Fore.RED + f"Incorreto! " + Style.RESET_ALL + "Voce inseriu " +Fore.RED + f"{key}" + Style.RESET_ALL)
 
         ttf = time()
         tempo_tentativa = round(ttf-tti,2)     
