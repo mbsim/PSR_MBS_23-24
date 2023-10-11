@@ -14,6 +14,7 @@ from nltk.corpus import words
 Input = namedtuple('Input', ['requested', 'received', 'duration'])
 
 def generate_random_word(length):
+
     word_list = words.words()
     random_word = random.choice(word_list)
     
@@ -34,8 +35,11 @@ def arg_init():
     
     return parser.parse_args()     
 
+#############################    MAIN    #######################
 
 def main():
+
+    # Variaveis
 
     test_start = time.strftime('%c')
     test_end = 0
@@ -43,6 +47,8 @@ def main():
     number_of_types = 0
     number_of_hits = 0
     inputs = []
+
+    #Chamada da função arg_init()
        
     args = arg_init()
 
@@ -52,19 +58,21 @@ def main():
 
     input("Pressione uma tecla para iniciar o desafio...")
 
+    # Atribuir o length
 
     if args.use_words:
         word_length = random.randint(2, 10)
-    else:
-        word_length = 1
+    #else:
+        #word_length = 1
 
     while True:
+
         if args.use_words:
             random_word = generate_random_word(word_length)
         else:
             random_word = random.choice(string.ascii_lowercase)
 
-        print(f"Digite: {random_word} (ou pressione espaço para encerrar)")
+        print(f"Digite: {random_word} ")
 
         start_time = time.time()
         user_input = input()
@@ -118,8 +126,6 @@ def main():
     }
 
     pprint(result_dict)
-
-    
 
 if __name__ == "__main__":
     main()

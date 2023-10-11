@@ -13,33 +13,26 @@ from readchar import readkey
 
 
 def main():
+
+
     keys = []
 
-    
-
     random_caracter = "bola"
-    resultado = ""
+
     keys = ""
         
-
     print(f"Digite: {random_caracter} : ",end = "",flush=True) 
 
 
     while len(keys) < len(random_caracter):
 
         key = readchar.readchar()
-        #abc = readkey()
         
         keys += key
-        print(key, end = "",flush=True)
-        #print()
+
+        print(key, end = "",flush=True)   
             
-    print()    
-             
-            
-        #key_string = ', '.join(keys)   
-            #resultado = "".join(keys)
-            #print(resultado, end ="",flush=True)        
+    print()          
 
     if keys == random_caracter:
         print(f"Correto, voce inseriu! {keys}")

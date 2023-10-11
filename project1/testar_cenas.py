@@ -29,7 +29,7 @@ def generate_random_caracter():
     random_caracter = chr(random_ascii)
     return random_caracter
 
-def caracter_function(args):
+def caracter_function(args,tempo_decorrido):
 
     input_records = []
 
@@ -293,7 +293,7 @@ def main():
 
         input_mx(tentativa, bem_sucedido,tempo_decorrido) 
 
-    statistic(bem_sucedido,tentativa,input_records,tempo_atual,tempo_final)
+    #statistic(bem_sucedido,tentativa,input_records,tempo_atual,tempo_final)
 
     
 
