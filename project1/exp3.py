@@ -47,14 +47,14 @@ def obtain_input_answer(x,random_word, bem_sucedido):
          
 
         if keys == random_word:
-            print(Fore.GREEN+ f"Correto! Voce inseriu {key}" + Style.RESET_ALL)
+            print(Fore.GREEN+ f"Correto!" + Style.RESET_ALL + "Voce inseriu " + Fore.GREEN + f"{keys}" + Style.RESET_ALL)
             bem_sucedido += 1
         elif ord(key) == 32:
             print(Fore.YELLOW + f"Teste cancelado" + Style.RESET_ALL)
 
            
         else:
-            print(Fore.RED + f"Incorreto! Voce inseriu {key}" + Style.RESET_ALL)
+            print(Fore.RED + f"Incorreto! Voce inseriu {keys}" + Style.RESET_ALL)
         
         
   
@@ -103,19 +103,20 @@ def temp_mx( bem_sucedido, tempo_decorrido,word_length):
         tempo_tentativa=  round(tempo_fim- tempo_inicio ,2)
 
         if input_ascii == 32:
-
             break
 
         number_of_types +=1
         input_record = Input(requested=random_word, received=key, duration=tempo_tentativa)
         input_records.append(input_record)  # Adicione o registro à lista
         temponaotenho +=1 # oque faz??
+        end_time=time()
+        tempo_decorrido= round(end_time - start_time, 2)
 
-        if temponaotenho >= args.max_value:
+        if tempo_decorrido >= args.max_value:
             break    
         
-    end_time=time()
-    tempo_decorrido= round(end_time - start_time, 2)  #nao precisa
+    #end_time=time()
+    #nao precisa
 
     #for record in input_records:
 
@@ -193,7 +194,7 @@ def arg_init():
                         help="Tempo máximo em segundos para o modo de tempo ou número máximo de entradas para o modo de número de entradas.")
     parser.add_argument("-uw", "--use_words", action="store_true",
                         help="Usar o modo de digitação de palavras em vez de digitação de caracteres individuais.")
-    parser.add_argument("-lt","--level_test",action="store_true",help="Para o modo de palavras selecione a dificuldade do nivel de 1 a 3")
+    parser.add_argument("-lt","--level_test",type=int,help="Para o modo de palavras selecione a dificuldade do nivel de 1 a 3")
     
     return parser.parse_args()     
 
@@ -222,7 +223,12 @@ def main():
     # Atribuir o length
 
     if args.use_words:
-        word_length = random.randint(2, 10)
+        if args.level_test == 1 :
+           word_length = random.randint(2, 4)
+        elif args.level_test ==2:
+           word_length = random.randint(2, 6)
+        else: 
+            word_length = random.randint(2, 8)
     else:
         word_length = 1
 
@@ -237,6 +243,11 @@ def main():
     # Statistic
 
     accuracy = str(round((bem_sucedido / number_of_types)* 100)) + '%' if number_of_types > 0 else str(0) + '%'
+    type_average_duration = sum(input_record.duration for input_record in input_records) / number_of_types if number_of_types > 0 else 0
+
+    type_hit_average_duration = sum(input_record.duration for input_record in input_records if input_record.requested == input_record.received and bem_sucedido > 0) / bem_sucedido if bem_sucedido > 0 else 0
+
+    type_miss_average_duration = sum(input_record.duration for input_record in input_records if input_record.requested != input_record.received and number_of_types - bem_sucedido > 0) / (number_of_types - bem_sucedido) if number_of_types - bem_sucedido > 0 else 0
 
 
     data_hora_fim = datetime.now()
@@ -249,6 +260,9 @@ def main():
         'test_start': test_start,
         'test_end': test_end,
         'number_of_types': number_of_types,
+        'type_average_duration': type_average_duration,
+        'type_hit_average_duration': type_hit_average_duration,
+        'type_miss_average_duration': type_miss_average_duration
         }      
     pprint(result_dict)
 
