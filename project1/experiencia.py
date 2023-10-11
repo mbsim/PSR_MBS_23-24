@@ -18,8 +18,8 @@ from nltk.corpus import words
 
 Input = namedtuple('Input', ['requested', 'received', 'duration'])
 
-def obtain_input_answer(x,random_word, bem_sucedido):
-
+def obtain_input_answer(x,random_word, bem_sucedido,duracao):
+    
     start_time = time()
 
     if x == 1:
@@ -60,7 +60,10 @@ def obtain_input_answer(x,random_word, bem_sucedido):
         else:
             print("Incorreto. Tente novamente.")
   
-    return bem_sucedido, key      
+    duracao += time() - start_time
+    print(duracao)
+
+    return bem_sucedido, key, duracao     
 
 def temp_mx( bem_sucedido, tempo_decorrido,word_length): 
 
@@ -70,6 +73,7 @@ def temp_mx( bem_sucedido, tempo_decorrido,word_length):
     number_of_types=0
     bem_sucedido=0
     temponaotenho=1
+    duracao =0
 
     while True:
 
@@ -79,7 +83,8 @@ def temp_mx( bem_sucedido, tempo_decorrido,word_length):
         else:
             random_word = random.choice(string.ascii_lowercase)
         
-        bem_sucedido, key = obtain_input_answer(x,random_word, bem_sucedido)
+        bem_sucedido, key, duracao = obtain_input_answer(x,random_word, bem_sucedido, duracao)
+
         input_ascii = ord(key)
 
         if input_ascii == 32:
@@ -91,7 +96,7 @@ def temp_mx( bem_sucedido, tempo_decorrido,word_length):
         input_records.append(input_record)  # Adicione o registro à lista
         temponaotenho +=1
 
-        if temponaotenho >= args.max_value:
+        if duracao >= args.max_value:
             break    
           
     for record in input_records:
@@ -111,6 +116,7 @@ def input_mx( bem_sucedido, tempo_decorrido,word_length):
     x=0
     number_of_types=0
     bem_sucedido=0
+    duracao=0
 
     while True:
 
@@ -120,7 +126,7 @@ def input_mx( bem_sucedido, tempo_decorrido,word_length):
         else:
             random_word = random.choice(string.ascii_lowercase)
         
-        bem_sucedido, key = obtain_input_answer(x,random_word, bem_sucedido)
+        bem_sucedido, key, duracao = obtain_input_answer(x,random_word, bem_sucedido,duracao)
 
         input_ascii = ord(key)
 
@@ -167,7 +173,7 @@ def arg_init():
     
     return parser.parse_args()     
 
-#############################    MAIN    #######################
+###################po_decorrid##########    MAIN    #######################
 
 def main():
 
@@ -186,10 +192,10 @@ def main():
     print("time mode:", args.use_time_mode)
     print("use words:", args.use_words)
 
+    # trocar para readkey pk so assume enter
     input("Pressione uma tecla para iniciar o desafio...")
 
     # Atribuir o length
-
     if args.use_words:
         word_length = random.randint(2, 10)
     else:
@@ -204,12 +210,13 @@ def main():
         number_of_types, bem_sucedido, tempo_decorrido, input_records = input_mx(bem_sucedido,tempo_decorrido,word_length)  
 
     # Statistic
-
     accuracy = bem_sucedido / number_of_types if number_of_types > 0 else 0 
 
-
+    
     data_hora_fim = datetime.now()
     test_end = data_hora_fim.strftime("%Y-%m-%d %H:%M:%S")
+
+    #Criacao do diccionario
 
     result_dict = {
         'accuracy': accuracy,
