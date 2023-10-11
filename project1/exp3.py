@@ -193,6 +193,7 @@ def arg_init():
                         help="Tempo máximo em segundos para o modo de tempo ou número máximo de entradas para o modo de número de entradas.")
     parser.add_argument("-uw", "--use_words", action="store_true",
                         help="Usar o modo de digitação de palavras em vez de digitação de caracteres individuais.")
+    parser.add_argument("-lt","--level_test",action="store_true",help="Para o modo de palavras selecione a dificuldade do nivel de 1 a 3")
     
     return parser.parse_args()     
 
@@ -214,6 +215,7 @@ def main():
     print("Tempo Máximo:", args.max_value)
     print("time mode:", args.use_time_mode)
     print("use words:", args.use_words)
+    print("level test:",args.level_test)
 
     input("Pressione ENTER para iniciar o desafio...")
 
