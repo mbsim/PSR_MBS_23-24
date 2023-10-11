@@ -155,7 +155,7 @@ def input_mx( bem_sucedido, tempo_decorrido,word_length):
             break    
 
     end_time=time()
-    tempo_decorrido= end_time - start_time     #nao precisa 
+    tempo_decorrido= round(end_time - start_time,2)     #nao precisa 
     #for record in input_records:
 
      #   print(record.requested)
